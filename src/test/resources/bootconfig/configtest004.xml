@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='utf-8'?>
+<jalo>
+  <!-- mandatory -->
+  <application-name>test004</application-name>
+  
+  <!-- mandatory -->
+  <!-- application-directory>app</application-directory -->
+  
+  <!-- not mandatory -->
+  <!-- url>http://www.yahoo.co.jp/</url -->
+
+  <!-- not mandatory -->
+  <!-- auto-update>0</auto-update -->
+  
+  <!-- not mandatory -->
+  <!-- temporary-directory>tmp</temporary-directory -->
+</jalo>

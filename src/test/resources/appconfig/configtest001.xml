@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<app>
+  <name>test001</name>
+  <version>0.1</version>
+  <classpath>
+    <path>test01.jar</path>
+    <path>test02.jar</path>
+  </classpath>
+  <mainclass>com.github.tamurashingo.jalo.Test</mainclass>
+</app>
