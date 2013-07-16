@@ -14,77 +14,77 @@ How to use
 1. Edit jalo.xml
 
 See following comment.
-    ```xml
-    <?xml version='1.0' encoding='utf-8'?>
-    <jalo>
-      <!---
-        --- Specify the application name.
-        --- It's not used for anything in particular.
-        --->
-      <application-name></application-name>
+```xml
+<?xml version='1.0' encoding='utf-8'?>
+<jalo>
+  <!---
+    --- Specify the application name.
+    --- It's not used for anything in particular.
+    --->
+  <application-name></application-name>
 
-      <!---
-        --- Specify the directory where stored the app.xml file
-        --->
-      <application-directory></application-directory>
+  <!---
+    --- Specify the directory where stored the app.xml file
+    --->
+  <application-directory></application-directory>
 
-      <!---
-        --- Specify where to get the app.xml file.
-        --->
-      <url></url>
+  <!---
+    --- Specify where to get the app.xml file.
+    --->
+  <url></url>
 
-      <!---
-        --- Update automatically?
-        ---  1 : Yes, update automatically.
-        ---  0 : No, update manually.
-        --->
-      <auto-update></auto-update>
+  <!---
+    --- Update automatically?
+    ---  1 : Yes, update automatically.
+    ---  0 : No, update manually.
+    --->
+  <auto-update></auto-update>
 
-      <!---
-        --- Specify java class to download app.xml and new modules.
-        --->
-      <update-class></update-class>
+  <!---
+    --- Specify java class to download app.xml and new modules.
+    --->
+  <update-class></update-class>
 
-      <!---
-        --- Specify the temporary directory.
-        --->
-      <temporary-directory></temporary-directory>
-    </jalo>
-    ```
+  <!---
+    --- Specify the temporary directory.
+    --->
+  <temporary-directory></temporary-directory>
+</jalo>
+```
 
 
 2. Edit app.xml
 
 See following comment.
 
-    ```xml
-    <?xml version='1.0' encoding='utf-8'?>
-    <app>
-      <!---
-        --- Specify the application name.
-        --->
-      <name></name>
-      
-      <!---
-        --- Specify the application version number.
-        --- If this version number greater than local app's version number,
-        --- download files and update the application.
-        --- >
-      <version></version>
-      
-      <!---
-        --- Specify all jar files to run your application.
-        --->
-      <classpath>
-        <path></path>
-      </classpath>
-      
-      <!---
-        --- Specify main class to run your application.
-        --->
-      <mainclass></mainclass>
-    </app>
-    ```
+```xml
+<?xml version='1.0' encoding='utf-8'?>
+<app>
+  <!---
+    --- Specify the application name.
+    --->
+  <name></name>
+  
+  <!---
+    --- Specify the application version number.
+    --- If this version number greater than local app's version number,
+    --- download files and update the application.
+    --- >
+  <version></version>
+  
+  <!---
+    --- Specify all jar files to run your application.
+    --->
+  <classpath>
+    <path></path>
+  </classpath>
+  
+  <!---
+    --- Specify main class to run your application.
+    --->
+  <mainclass></mainclass>
+</app>
+```
 
 
 3. Distribute files
@@ -96,30 +96,30 @@ example
 -------
 ### files
 
-    ```xml
-    <?xml version='1.0' encoding='utf-8'?>
-    <jalo>
-      <application-name>TestHelloWorld</application-name>
-      <application-directory>app</application-directory>
-      <url>http://tamurashingo.github.io/jalo/testhelloworld</url>
-      <auto-update>0</auto-update>
-      <update-class>com.github.tamurashingo.jalo.autoupdater.impl.HttpAutoUpdater</update-class>
-      <temporary-directory>tmp</temporary-directory>
-    </jalo>
-    ```
+```xml
+<?xml version='1.0' encoding='utf-8'?>
+<jalo>
+  <application-name>TestHelloWorld</application-name>
+  <application-directory>app</application-directory>
+  <url>http://tamurashingo.github.io/jalo/testhelloworld</url>
+  <auto-update>0</auto-update>
+  <update-class>com.github.tamurashingo.jalo.autoupdater.impl.HttpAutoUpdater</update-class>
+  <temporary-directory>tmp</temporary-directory>
+</jalo>
+```
 
-    ```xml
-    <?xml version='1.0' encoding='utf-8'?>
-    <app>
-      <name>TestHelloWorld</name>
-      <version>0.1</version>
-      <classpath>
-        <path>TestHelloWorld01.jar</path>
-        <path>commons-lang3-3.1.jar</path>
-      </classpath>
-      <mainclass>test.main.Main</mainclass>
-    </app>
-    ```
+```xml
+<?xml version='1.0' encoding='utf-8'?>
+<app>
+  <name>TestHelloWorld</name>
+  <version>0.1</version>
+  <classpath>
+    <path>TestHelloWorld01.jar</path>
+    <path>commons-lang3-3.1.jar</path>
+  </classpath>
+  <mainclass>test.main.Main</mainclass>
+</app>
+```
     
     
 **warning**
@@ -142,23 +142,23 @@ So, when you want to use splash screen, get and override default splash screen.
 
 here's example.
 
-    ```java
-    // show simple image.
-    public Init {
-        public void init() {
-            SplashScreen screen = SplashScreen.getSplashScreen();
-            if (screen != null) {
-                try {
-                    ClassLoader loader = Init.class.getClassLoader(); 
-                    screen.setImageURL(loader.getResource("splashscreen.png"));
-                }
-                catch (NullPointerException|IOException|IllegalStateException ex) {
-                    ex.printStackTrace();
-                }
+```java
+// show simple image.
+public Init {
+    public void init() {
+        SplashScreen screen = SplashScreen.getSplashScreen();
+        if (screen != null) {
+            try {
+                ClassLoader loader = Init.class.getClassLoader(); 
+                screen.setImageURL(loader.getResource("splashscreen.png"));
+            }
+            catch (NullPointerException|IOException|IllegalStateException ex) {
+                ex.printStackTrace();
             }
         }
     }
-    ```
+}
+```
 
 
 Copyright and license
