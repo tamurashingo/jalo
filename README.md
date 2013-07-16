@@ -126,13 +126,12 @@ example
 The version check uses String.compareTo() method.
 So, check the following table.
 
- | local | server | download? |
- |:-----:|:------:|:---------:|
- | 0.1   | 0.1    | no        |
- | 0.1   | 0.2    | yes       |
- | 0.8   | 0.9    | yes       |
- | 0.9   | 0.10   | no        |
- 
+| local | server | download? |
+|:-----:|:------:|:---------:|
+| 0.1   | 0.1    | no        |
+| 0.1   | 0.2    | yes       |
+| 0.8   | 0.9    | yes       |
+| 0.9   | 0.10   | no        |
 
 
 ### how to use splash screen
