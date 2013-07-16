@@ -32,6 +32,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.github.tamurashingo.jalo.autoupdater.AutoUpdater;
@@ -65,7 +66,7 @@ public abstract class AbstractAutoUpdaterImpl implements AutoUpdater {
     protected AppConfigBean appConfig;
     
     /** callback list for AutoUpdaterListner */
-    protected List<AutoUpdaterListener> callbackList;
+    protected List<AutoUpdaterListener> callbackList = new LinkedList<>();
     
     
     /**
@@ -101,13 +102,20 @@ public abstract class AbstractAutoUpdaterImpl implements AutoUpdater {
         try {
             fetchFile(AppConfigBean.DEFAULT_FILENAME);
             
-            appConfig = new AppConfigBean(bootConfig);
+            appConfig = new AppConfigBean(bootConfig.getTmpDir());
+            appConfig.read(new File(bootConfig.getTmpDir(), AppConfigBean.DEFAULT_FILENAME).getPath());
             return appConfig;
         }
         catch (XMLReaderException ex) {
             throw new AutoUpdaterException(ex);
         }
     }
+    
+    @Override
+    public boolean isUpdatable(String currentVersion) {
+    	return appConfig.getVersion().compareTo(currentVersion) > 0;
+    }
+    
     
     @Override
     public void download() throws AutoUpdaterException {
@@ -125,6 +133,8 @@ public abstract class AbstractAutoUpdaterImpl implements AutoUpdater {
     
     @Override
     public void update() throws AutoUpdaterException {
+    	deleteAppDir();
+    	createAppDir();
         copyAllFiles();
     }
     
@@ -138,6 +148,14 @@ public abstract class AbstractAutoUpdaterImpl implements AutoUpdater {
         callbackList.remove(listener);
     }
 
+    
+    /**
+     * delete the application directory.
+     */
+    protected void deleteAppDir() {
+    	File appDir = new File(bootConfig.getApplicationDir());
+    	deleteAll(appDir);
+    }
     
     /**
      * delete the temporary directory.
@@ -175,6 +193,15 @@ public abstract class AbstractAutoUpdaterImpl implements AutoUpdater {
             }
         }
     }
+    
+    /**
+     * create the application directory.
+     * @return
+     */
+    protected boolean createAppDir() {
+    	File appDir = new File(bootConfig.getApplicationDir());
+    	return appDir.mkdir();
+    }
 
     
     /**
@@ -194,6 +221,9 @@ public abstract class AbstractAutoUpdaterImpl implements AutoUpdater {
     protected void copyAllFiles() throws AutoUpdaterException {
         FileSystem fileSystem = FileSystems.getDefault();
 
+        List<String> classpath = appConfig.getClasspath();
+        classpath.add(AppConfigBean.DEFAULT_FILENAME);
+        
         for (String filename: appConfig.getClasspath()) {
             Path src = fileSystem.getPath(bootConfig.getTmpDir(), filename);
             Path dst = fileSystem.getPath(bootConfig.getApplicationDir(), filename);

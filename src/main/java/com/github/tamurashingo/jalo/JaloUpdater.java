@@ -1,4 +1,4 @@
-/*-
+/*- 
  * The MIT License
  * 
  * Copyright (c) 2013 tamura shingo
@@ -23,46 +23,54 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  * 
  */
-package com.github.tamurashingo.jalo.autoupdater.impl;
+package com.github.tamurashingo.jalo;
 
-import java.io.IOException;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
-
+import com.github.tamurashingo.jalo.autoupdater.AutoUpdater;
 import com.github.tamurashingo.jalo.autoupdater.AutoUpdaterException;
+import com.github.tamurashingo.jalo.xml.AppConfigBean;
+import com.github.tamurashingo.jalo.xml.BootConfigBean;
 
 
 /**
- * local-file-copy implementation of the {@code AutoUpdater} interface.
+ * <p>
+ * This class updates jar files.
+ * </p>
+ * 
  * 
  * @author tamura shingo
  *
  */
-public class FileAutoUpdater extends AbstractAutoUpdaterImpl {
-    
-    private FileSystem fileSystem = FileSystems.getDefault();
-
-    @Override
-    void beginFetch() throws AutoUpdaterException {
-    }
-
-    @Override
-    void fetchFile(String filename) throws AutoUpdaterException {
-        Path src = fileSystem.getPath(bootConfig.getUrl(), filename);
-        Path dst = fileSystem.getPath(bootConfig.getTmpDir(), filename);
-        try {
-            Files.copy(src, dst, StandardCopyOption.REPLACE_EXISTING);
-        }
-        catch (IOException ex) {
-            throw new AutoUpdaterException("failed to download:" + filename, ex);
-        }
-    }
-
-    @Override
-    void endFetch() throws AutoUpdaterException {
-    }
+public class JaloUpdater {
+	
+	private BootConfigBean bootConfig;
+	
+	private AutoUpdater updater;
+	
+	public JaloUpdater(AutoUpdater updater) {
+		this.updater = updater;
+	}
+	
+	public void setBootConfig(BootConfigBean bootConfig) {
+		this.bootConfig = bootConfig;
+	}
+	
+	public void download() throws AutoUpdaterException {
+		updater.setBootConfig(bootConfig);
+		updater.fetchAppConfig();
+	}
+	
+	public boolean isUpdate(AppConfigBean currentConfig) {
+		if (currentConfig == null) {
+			return true;
+		}
+		else {
+			return updater.isUpdatable(currentConfig.getVersion());
+		}
+	}
+	
+	public void update() throws AutoUpdaterException {
+		updater.download();
+		updater.update();
+	}
 
 }

@@ -44,15 +44,14 @@ import com.github.tamurashingo.jalo.autoupdater.AutoUpdaterException;
  */
 public class HttpAutoUpdater extends AbstractAutoUpdaterImpl {
 
-    private FileSystem fileSystem;
+    private FileSystem fileSystem = FileSystems.getDefault();
     
     @Override
-    void beginFetch() throws AutoUpdaterException {
-        fileSystem = FileSystems.getDefault();
+    protected void beginFetch() throws AutoUpdaterException {
     }
     
     @Override
-    void fetchFile(String filename) throws AutoUpdaterException {
+    protected void fetchFile(String filename) throws AutoUpdaterException {
         HttpURLConnection conn = null;
         try {
             Path dst = fileSystem.getPath(bootConfig.getTmpDir(), filename);
@@ -73,7 +72,7 @@ public class HttpAutoUpdater extends AbstractAutoUpdaterImpl {
 
 
     @Override
-    void endFetch() throws AutoUpdaterException {
+    protected void endFetch() throws AutoUpdaterException {
     }
 
 }

@@ -25,6 +25,9 @@
  */
 package com.github.tamurashingo.jalo;
 
+import com.github.tamurashingo.jalo.autoupdater.AutoUpdater;
+import com.github.tamurashingo.jalo.autoupdater.AutoUpdaterFactory;
+import com.github.tamurashingo.jalo.autoupdater.impl.StdoutAutoUpdaterListener;
 import com.github.tamurashingo.jalo.xml.AppConfigBean;
 import com.github.tamurashingo.jalo.xml.BootConfigBean;
 
@@ -37,6 +40,33 @@ import com.github.tamurashingo.jalo.xml.BootConfigBean;
  *
  */
 public class Main {
+	
+	/**
+	 * update application.
+	 * @param bootConfig system configuration
+	 * @param currentConfig current application configuration(if exists)
+	 * @return new application configuration
+	 * @throws JaloException if error occurs.
+	 */
+	public static AppConfigBean update(BootConfigBean bootConfig, AppConfigBean currentConfig) throws JaloException {
+		AutoUpdater autoUpdater = AutoUpdaterFactory.create(bootConfig);
+		autoUpdater.setBootConfig(bootConfig);
+		autoUpdater.addAutoUpdaterListener(new StdoutAutoUpdaterListener());
+		
+		JaloUpdater updater = new JaloUpdater(autoUpdater);
+		updater.setBootConfig(bootConfig);
+		updater.download();
+		
+		if (updater.isUpdate(currentConfig)) {
+			updater.update();
+		}
+		
+        AppConfigBean appConfig = AppConfigBean.createConfig(bootConfig);
+		return appConfig;
+	}
+	
+	
+	
     
     /**
      * parse args and get BootConfig filename.
@@ -66,8 +96,12 @@ public class Main {
         String bootFile = getBootFileName(args);
         bootConfig.read(bootFile);
         
-        AppConfigBean appConfig = new AppConfigBean(bootConfig);
-        Jalo jalo = new Jalo(appConfig);
+        AppConfigBean appConfig = AppConfigBean.createConfig(bootConfig);
+        if (appConfig == null || bootConfig.isAutoUpdate()) {
+        	appConfig = update(bootConfig, appConfig);
+        }
+        
+        JaloRunner jalo = new JaloRunner(appConfig);
         jalo.createClassLoader();
         jalo.runApp();
     }

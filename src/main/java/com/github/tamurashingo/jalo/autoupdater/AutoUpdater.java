@@ -36,13 +36,14 @@ import com.github.tamurashingo.jalo.xml.BootConfigBean;
  * <code><pre>
  * AutoUpdater updater = CreateAutoUpdater();
  * updater.setBootConfig(bootConfig);
+ * 
  * updater.fetchAppConfig();
  * 
- * updater.addAutoUpdaterListener(new XXXAutoUpdaterListener());
- * 
- * updater.download();
- * 
- * updater.update();
+ * if (updater.isUpdatable()) {
+ *     updater.addAutoUpdaterListener(new XXXAutoUpdaterListener());
+ *     updater.download();
+ *     updater.update();
+ * }
  * </pre></code>
  * </p>
  * 
@@ -74,6 +75,16 @@ public interface AutoUpdater {
      * @throws AutoUpdaterException if download error occurs.
      */
     public void download() throws AutoUpdaterException;
+    
+    
+    /**
+     * compares current version with remote version and returns a boolean
+     * which tells if the remote version is newer than current version. 
+     * 
+     * @return true when remote version is newer than current version.
+     */
+    public boolean isUpdatable(String currentVersion);
+    
     
     /**
      * copy all files in temporary directory to applicaation directory.

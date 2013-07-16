@@ -62,7 +62,7 @@ public class AppConfigBeanTest {
         String path = new File(AppConfigBeanTest.class.getClassLoader().getResource("appconfig/test003/app.xml").toURI()).getParent();
         bootConfig.setApplicationDir(path);
         
-        AppConfigBean bean = new AppConfigBean(bootConfig);
+        AppConfigBean bean = AppConfigBean.createConfig(bootConfig);
         assertEquals("test003", bean.getApplicationName());
         assertEquals("0.1", bean.getVersion());
         

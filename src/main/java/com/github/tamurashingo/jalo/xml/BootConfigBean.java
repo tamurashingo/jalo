@@ -58,7 +58,7 @@ public class BootConfigBean implements java.io.Serializable, XMLReader {
 	/** application name */
 	private String applicationName;
 	
-	/** directory stored the appconfig.xml file */
+	/** directory stored the app.xml file */
 	private String applicationDir;
 	
 	
@@ -67,6 +67,9 @@ public class BootConfigBean implements java.io.Serializable, XMLReader {
     
 	/** download from */
 	private String url;
+	
+	/** implements AutoUpdater class */
+	private String updateClass;
 	
 	/** download temporary directory */
 	private String tmpDir;
@@ -85,6 +88,7 @@ public class BootConfigBean implements java.io.Serializable, XMLReader {
             
             readAutoUpdate(xpath, doc);
             readUrl(xpath, doc);
+            readUpdateClass(xpath, doc);
             readTmpDir(xpath, doc);
         }
         catch (FileNotFoundException ex) {
@@ -177,6 +181,24 @@ public class BootConfigBean implements java.io.Serializable, XMLReader {
         }
     }
     
+
+    /**
+     * read and set the update-class name.
+     * 
+     * @param xpath XPath
+     * @param doc Document
+     * @throws XMLReaderException if parse error occurs.
+     */
+    private void readUpdateClass(XPath xpath, Document doc) throws XMLReaderException {
+    	try {
+    		String updateClass = (String)xpath.evaluate("/jalo/update-class", doc, XPathConstants.STRING);
+    		this.setUpdateClass(updateClass);
+    	}
+    	catch (XPathExpressionException ex) {
+    		throw  new XMLReaderException("cannot read '/jalo/update-class'", ex);
+    	}
+    }
+    
     
     /**
      * read and set the temporary directory name.
@@ -191,7 +213,7 @@ public class BootConfigBean implements java.io.Serializable, XMLReader {
             this.setTmpDir(tmpDir);
         }
         catch (XPathExpressionException ex) {
-            throw new XMLReaderException("cannot read '/jalo/temporary-directory", ex);
+            throw new XMLReaderException("cannot read '/jalo/temporary-directory'", ex);
         }
     }
     
@@ -280,6 +302,22 @@ public class BootConfigBean implements java.io.Serializable, XMLReader {
     public void setTmpDir(String tmpDir) {
         this.tmpDir = tmpDir;
     }
+
+
+	/**
+	 * @return the updateClass
+	 */
+	public String getUpdateClass() {
+		return updateClass;
+	}
+
+
+	/**
+	 * @param updateClass the updateClass to set
+	 */
+	public void setUpdateClass(String updateClass) {
+		this.updateClass = updateClass;
+	}
     
 
 }

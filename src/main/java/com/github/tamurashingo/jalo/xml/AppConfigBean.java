@@ -25,6 +25,7 @@
  */
 package com.github.tamurashingo.jalo.xml;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -89,14 +90,34 @@ public class AppConfigBean implements java.io.Serializable, XMLReader {
         this.applicationDir = applicationDir;
     }
     
+//    /**
+//     * Construct and read config.
+//     * @param bootConfig system configuration.
+//     * @throws XMLReaderException if error occurs. 
+//     */
+//    public AppConfigBean(BootConfigBean bootConfig) throws XMLReaderException {
+//        this(bootConfig.getApplicationDir());
+//        read(bootConfig.getApplicationDir() + "/" + DEFAULT_FILENAME);
+//    }
+    
+
     /**
-     * Construct and read config.
-     * @param bootConfig system configuration.
-     * @throws XMLReaderException if error occurs. 
+     * Create and read config.
+     * @param bootConfig system configuration
+     * @return AppConfigBean. if app.xml is not found, return null.
+     * @throws XMLReaderException if error occurs.
      */
-    public AppConfigBean(BootConfigBean bootConfig) throws XMLReaderException {
-        this(bootConfig.getApplicationDir());
-        read(bootConfig.getApplicationDir() + "/" + DEFAULT_FILENAME);
+    public static AppConfigBean createConfig(BootConfigBean bootConfig) throws XMLReaderException {
+    	AppConfigBean appConfig = new AppConfigBean(bootConfig.getApplicationDir());
+    	
+    	File file = new File(appConfig.applicationDir, DEFAULT_FILENAME);
+    	if (file.exists()) {
+    		appConfig.read(file.getPath());
+    		return appConfig;
+    	}
+    	else {
+    		return null;
+    	}
     }
 
     

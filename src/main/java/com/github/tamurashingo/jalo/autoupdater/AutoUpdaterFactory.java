@@ -23,43 +23,31 @@
  * OR OTHER DEALINGS IN THE SOFTWARE.
  * 
  */
-package com.github.tamurashingo.jalo.autoupdater.impl;
+package com.github.tamurashingo.jalo.autoupdater;
 
-import java.util.List;
+import com.github.tamurashingo.jalo.JaloException;
+import com.github.tamurashingo.jalo.xml.BootConfigBean;
 
-import com.github.tamurashingo.jalo.autoupdater.AutoUpdaterListener;
-
-/**
- * sample implementation.
- * 
- * @author tamura shingo
- *
- */
-public class StdoutAutoUpdaterListener implements AutoUpdaterListener {
-    
-    private int allcounts;
-    private int current;
-
-    @Override
-    public void notifyAllfiles(List<String> allfiles) {
-        allcounts = allfiles.size();
-        current = 1;
-    }
-
-    @Override
-    public void notifyBegin(String fileName) {
-        System.out.printf("%s (%d/%d)", fileName, current, allcounts);
-        System.out.flush();
-    }
-
-    @Override
-    public void notifyEnd(String fileName) {
-        System.out.printf("   ... ok\n");
-        current++;
-    }
-
-    @Override
-    public void notifyCancel(String fileName) {
-    }
+public class AutoUpdaterFactory {
+	
+	private AutoUpdaterFactory() {
+	}
+	
+	public static AutoUpdater create(BootConfigBean bootConfig) throws JaloException {
+		try {
+			Class<?> cls = Class.forName(bootConfig.getUpdateClass());
+			Object obj = cls.newInstance();
+		
+			if (obj instanceof AutoUpdater) {
+				return (AutoUpdater)obj;
+			}
+			else {
+				throw new JaloException("not implement AutoUpdater:" + bootConfig.getUpdateClass());
+			}
+		}
+		catch (ClassNotFoundException|InstantiationException|IllegalAccessException ex) {
+			throw new JaloException("cannot create AutoUpdater instance:" + bootConfig.getUpdateClass(), ex);
+		}
+	}
 
 }
