@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<app>
+  <name>integration-test</name>
+  <version>0.2</version>
+  <classpath>
+    <path>integration-test.jar</path>
+  </classpath>
+  <mainclass>com.github.tamurashingo.jalo.integration.TestMain</mainclass>
+</app>
