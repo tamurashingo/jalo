@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<jalo>
+  <application-name>integration-test</application-name>
+  <application-directory>app</application-directory>
+  <url>http://tamurashingo.github.io/jalo/integration/data/boot0001</url>
+  <auto-update>1</auto-update>
+  <update-class>com.github.tamurashingo.jalo.autoupdater.impl.HttpAutoUpdater</update-class>
+  <temporary-directory>tmp</temporary-directory>
+</jalo>

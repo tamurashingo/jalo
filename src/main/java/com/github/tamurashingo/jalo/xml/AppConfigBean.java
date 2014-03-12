@@ -29,6 +29,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -110,10 +113,10 @@ public class AppConfigBean implements java.io.Serializable, XMLReader {
     public static AppConfigBean createConfig(BootConfigBean bootConfig) throws XMLReaderException {
     	AppConfigBean appConfig = new AppConfigBean(bootConfig.getApplicationDir());
     	
-    	File file = new File(appConfig.applicationDir, DEFAULT_FILENAME);
-    	if (file.exists()) {
-    		appConfig.read(file.getPath());
-    		return appConfig;
+    	Path path = Paths.get(bootConfig.getBaseDir(), appConfig.applicationDir, DEFAULT_FILENAME);
+    	if (Files.exists(path)) {
+    	    appConfig.read(path.toString());
+            return appConfig;
     	}
     	else {
     		return null;
@@ -124,6 +127,8 @@ public class AppConfigBean implements java.io.Serializable, XMLReader {
     @Override
     public void read(String filename) throws XMLReaderException {
         try (FileInputStream in = new FileInputStream(filename)) {
+            
+            setApplicationDir(new File(filename).toPath().toAbsolutePath().getParent().toString());
             
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             Document doc = builder.parse(in);

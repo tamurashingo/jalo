@@ -17,6 +17,7 @@ public class BootConfigBeanTest {
     public void test001() throws Exception {
         BootConfigBean bean = new BootConfigBean();
         String file = BootConfigBeanTest.class.getClassLoader().getResource("bootconfig/configtest001.xml").toURI().getPath();
+        System.out.println("path:" + file);
         bean.read(file);
         
         assertEquals("test001", bean.getApplicationName());

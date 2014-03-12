@@ -61,10 +61,11 @@ public class JaloRunner {
     
     /**
      * create classloader to boot the application.
-     * 
+     *
+     * @return classloader
      * @throws JaloException
      */
-    public void createClassLoader() throws JaloException {
+    public ClassLoader createClassLoader() throws JaloException {
         String baseDir = appConfig.getApplicationDir();
         if (baseDir == null || baseDir.isEmpty()) {
             baseDir = "./";
@@ -86,8 +87,9 @@ public class JaloRunner {
             throw new JaloException(ex);
         }
         
-        ClassLoader parent = ClassLoader.getSystemClassLoader();
-        this.loader = new URLClassLoader(url, parent);
+        this.loader = URLClassLoader.newInstance(url);
+        
+        return this.loader;
     }
     
     

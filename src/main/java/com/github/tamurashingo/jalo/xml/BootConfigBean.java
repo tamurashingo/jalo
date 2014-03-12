@@ -25,9 +25,11 @@
  */
 package com.github.tamurashingo.jalo.xml;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Paths;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -74,10 +76,14 @@ public class BootConfigBean implements java.io.Serializable, XMLReader {
 	/** download temporary directory */
 	private String tmpDir;
 	
+	/** base directory */
+	private String baseDir;
+	
 	
     @Override
     public void read(String filename) throws XMLReaderException {
         try (FileInputStream in = new FileInputStream(filename)) {
+            this.baseDir = new File(filename).toPath().toAbsolutePath().getParent().toString();
             
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             Document doc = builder.parse(in);
@@ -318,6 +324,22 @@ public class BootConfigBean implements java.io.Serializable, XMLReader {
 	public void setUpdateClass(String updateClass) {
 		this.updateClass = updateClass;
 	}
-    
+
+
+    /**
+     * @return the baseDir
+     */
+    public String getBaseDir() {
+        return baseDir;
+    }
+
+
+    /**
+     * @param baseDir the baseDir to set
+     */
+    public void setBaseDir(String baseDir) {
+        this.baseDir = baseDir;
+    }
+
 
 }

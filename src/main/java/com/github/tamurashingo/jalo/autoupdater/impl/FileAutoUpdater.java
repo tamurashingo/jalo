@@ -52,7 +52,7 @@ public class FileAutoUpdater extends AbstractAutoUpdaterImpl {
     @Override
     void fetchFile(String filename) throws AutoUpdaterException {
         Path src = fileSystem.getPath(bootConfig.getUrl(), filename);
-        Path dst = fileSystem.getPath(bootConfig.getTmpDir(), filename);
+        Path dst = fileSystem.getPath(bootConfig.getBaseDir(), bootConfig.getTmpDir(), filename);
         try {
             Files.copy(src, dst, StandardCopyOption.REPLACE_EXISTING);
         }

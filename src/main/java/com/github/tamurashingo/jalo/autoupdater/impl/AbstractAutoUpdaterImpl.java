@@ -31,6 +31,7 @@ import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.LinkedList;
 import java.util.List;
@@ -103,7 +104,7 @@ public abstract class AbstractAutoUpdaterImpl implements AutoUpdater {
             fetchFile(AppConfigBean.DEFAULT_FILENAME);
             
             appConfig = new AppConfigBean(bootConfig.getTmpDir());
-            appConfig.read(new File(bootConfig.getTmpDir(), AppConfigBean.DEFAULT_FILENAME).getPath());
+            appConfig.read(Paths.get(bootConfig.getBaseDir(), bootConfig.getTmpDir(), AppConfigBean.DEFAULT_FILENAME).toString());
             return appConfig;
         }
         catch (XMLReaderException ex) {
@@ -153,7 +154,7 @@ public abstract class AbstractAutoUpdaterImpl implements AutoUpdater {
      * delete the application directory.
      */
     protected void deleteAppDir() {
-    	File appDir = new File(bootConfig.getApplicationDir());
+    	File appDir = new File(bootConfig.getBaseDir(), bootConfig.getApplicationDir());
     	deleteAll(appDir);
     }
     
@@ -161,7 +162,7 @@ public abstract class AbstractAutoUpdaterImpl implements AutoUpdater {
      * delete the temporary directory.
      */
     protected void deleteTmpDir() {
-        File tmpDir = new File(bootConfig.getTmpDir());
+        File tmpDir = new File(bootConfig.getBaseDir(), bootConfig.getTmpDir());
         deleteAll(tmpDir);
     }
     
@@ -199,7 +200,7 @@ public abstract class AbstractAutoUpdaterImpl implements AutoUpdater {
      * @return
      */
     protected boolean createAppDir() {
-    	File appDir = new File(bootConfig.getApplicationDir());
+    	File appDir = new File(bootConfig.getBaseDir(), bootConfig.getApplicationDir());
     	return appDir.mkdir();
     }
 
@@ -209,7 +210,7 @@ public abstract class AbstractAutoUpdaterImpl implements AutoUpdater {
      * @return
      */
     protected boolean createTempDir() {
-        File tmpDir = new File(bootConfig.getTmpDir());
+        File tmpDir = new File(bootConfig.getBaseDir(), bootConfig.getTmpDir());
         return tmpDir.mkdir();
     }
     
@@ -225,8 +226,8 @@ public abstract class AbstractAutoUpdaterImpl implements AutoUpdater {
         classpath.add(AppConfigBean.DEFAULT_FILENAME);
         
         for (String filename: appConfig.getClasspath()) {
-            Path src = fileSystem.getPath(bootConfig.getTmpDir(), filename);
-            Path dst = fileSystem.getPath(bootConfig.getApplicationDir(), filename);
+            Path src = fileSystem.getPath(bootConfig.getBaseDir(), bootConfig.getTmpDir(), filename);
+            Path dst = fileSystem.getPath(bootConfig.getBaseDir(), bootConfig.getApplicationDir(), filename);
             try {
                 Files.copy(src, dst, StandardCopyOption.REPLACE_EXISTING);
             }

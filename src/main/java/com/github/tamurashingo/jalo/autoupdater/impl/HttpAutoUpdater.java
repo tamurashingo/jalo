@@ -54,7 +54,7 @@ public class HttpAutoUpdater extends AbstractAutoUpdaterImpl {
     protected void fetchFile(String filename) throws AutoUpdaterException {
         HttpURLConnection conn = null;
         try {
-            Path dst = fileSystem.getPath(bootConfig.getTmpDir(), filename);
+            Path dst = fileSystem.getPath(bootConfig.getBaseDir(), bootConfig.getTmpDir(), filename);
             URL url = new URL(bootConfig.getUrl() + "/" + filename);
             conn = (HttpURLConnection)url.openConnection();
             Files.copy(conn.getInputStream(), dst, StandardCopyOption.REPLACE_EXISTING);

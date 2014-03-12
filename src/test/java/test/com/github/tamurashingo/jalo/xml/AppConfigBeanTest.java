@@ -29,7 +29,7 @@ public class AppConfigBeanTest {
         
         assertEquals("com.github.tamurashingo.jalo.Test", bean.getMainClass());
         
-        assertEquals("", bean.getApplicationDir());
+        assertNotEquals("", bean.getApplicationDir());
     }
     
     /*-
@@ -50,7 +50,7 @@ public class AppConfigBeanTest {
         
         assertEquals("com.github.tamurashingo.jalo.Test", bean.getMainClass());
         
-        assertEquals("base", bean.getApplicationDir());
+        assertNotEquals("", bean.getApplicationDir());
     }
     
     /*-
@@ -61,6 +61,7 @@ public class AppConfigBeanTest {
         BootConfigBean bootConfig = new BootConfigBean();
         String path = new File(AppConfigBeanTest.class.getClassLoader().getResource("appconfig/test003/app.xml").toURI()).getParent();
         bootConfig.setApplicationDir(path);
+        bootConfig.setBaseDir("");
         
         AppConfigBean bean = AppConfigBean.createConfig(bootConfig);
         assertEquals("test003", bean.getApplicationName());
